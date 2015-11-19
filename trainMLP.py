@@ -29,13 +29,10 @@ def sigmoid(x):
 
 def updateWeight():
 
-    global symmetry, eccentricity, target, wHidden, wOut, input, output, deltaHidden, delta, numberOfEpochs, learningRate, delta
+    global symmetry, eccentricity, target, wHidden, wOut, input, output, deltaHidden, delta, learningRate
     global biasOutput, biasHidden
     deltaHidden     = np.array([0.,0.,0.,0.,0.])
     delta           = np.array([0.,0.,0.,0.])
-    biasHidden      = np.array([0.,0.,0.,0.,0.])
-    biasOutput      = np.array([0.,0.,0.,0.])
-
 
     sumOfSquareDifferences = 0
 
@@ -76,7 +73,7 @@ def updateWeight():
         sigma = 0.0
         for h in range(hidden.size):
             for j in range(delta.size):
-                sigma += wOut[h][j]*delta[j]
+                sigma += wOut[h][j] * delta[j]
             deltaHidden[h] = hidden[h]*(1 - hidden[h]) * sigma
             sigma = 0.
 
@@ -162,11 +159,11 @@ def reset():
         for y in range(4):
                 wOut[x][y] = random.uniform(-1, 1)
 
-    for w in biasHidden:
-        w = np.random.uniform(-1, 1)
+    for iB in range(biasHidden.size):
+        biasHidden[iB] = np.random.uniform(-1, 1)
 
-    for o in biasOutput:
-        o = np.random.uniform(-1,1)
+    for iO in range(biasOutput.size):
+        biasOutput[iO] = np.random.uniform(-1,1)
 
 
 def writeTheWeightsToFile(fileName):
@@ -188,16 +185,17 @@ def writeTheWeightsToFile(fileName):
     for iW in range(biasOutput.size - 1):
         line+= str(biasOutput[iW])  + ","
 
-    line+=str(biasOutput[-1])
+    line += str(biasOutput[-1])
     file.write(line)
     line = ''
     file.close()
 
 def main():
-    epochs = [10000]
+    epochs = [10,100,1000,10000]
     xaxis = []
     ssdList = []
-
+    reset()
+    writeTheWeightsToFile("0.csv")
     for epoch in epochs:
         for i in range(epoch):
             # initializeWeights()
@@ -215,8 +213,6 @@ def main():
 e = 0
 e += 1
 main()
-print(e,"\n")
-
 
 
 
